@@ -1,0 +1,32 @@
+services:
+  app:
+    image: node:18
+    container_name: nestjs_app
+    ports:
+      - "5000:5000"
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: "postgresql://prisma:prisma@db:5432/book_catalog"
+    command: ["sh", "-c", "yarn install && npx prisma generate && npx prisma migrate deploy && yarn run start:dev"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:14
+    container_name: postgres_container
+    ports:
+      - "6000:5432"
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+      POSTGRES_DB: book_catalog
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prisma -d book_catalog"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

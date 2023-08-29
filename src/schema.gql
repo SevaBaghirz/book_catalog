@@ -1,0 +1,47 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Author {
+  books: [Book]!
+  first_name: String!
+  id: ID!
+  last_name: String!
+}
+
+input AuthorInput {
+  first_name: String!
+  last_name: String!
+}
+
+type Book {
+  authors: [Author]!
+  id: ID!
+  title: String!
+}
+
+input BookAuthorInput {
+  authorId: String!
+  bookId: String!
+}
+
+input BookInput {
+  authorIds: [ID!]!
+  title: String!
+}
+
+type Mutation {
+  addAuthor(input: BookAuthorInput!): Book!
+  createAuthor(author: AuthorInput!): Author!
+  createBook(book: BookInput!): Book!
+  deleteAuthor(id: String!): Int!
+  deleteAuthorWithBooks(id: String!): Int!
+  deleteBook(id: String!): Int!
+}
+
+type Query {
+  getAuthor(id: String!): Author
+  getAuthors(maxNumberOfBooks: Float, minNumberOfBooks: Float): [Author!]!
+  getBook(id: String!): Book
+  getBooks(title: String!): [Book!]!
+}
